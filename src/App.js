@@ -16,38 +16,19 @@ import {
   ErrorCard,
 } from './style';
 import MyLoader from './Loader';
+import useGetData from './hooks/useGetData';
+import useFormInput from './hooks/useFormInput';
 import './App.css';
 
 function App() {
-  const [data, setData] = React.useState();
-  const [text, setText] = React.useState('');
-  const [url, setUrl] = React.useState(
-    'https://rickandmortyapi.com/api/episode/'
-  );
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
+  const initUrl = 'https://rickandmortyapi.com/api/episode/';
 
-  React.useEffect(() => {
-    const fetchAPI = async () => {
-      setIsError(false);
-      setIsLoading(true);
-      try {
-        const response = await window.fetch(url);
-        const resData = await response.json();
+  const searchInput = useFormInput({
+    name: 'searchInput',
+    placeholder: 'type something...',
+  });
 
-        if (response.status >= 400) {
-          throw new Error();
-          return;
-        }
-
-        setData(resData.results || [resData]);
-      } catch (err) {
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    fetchAPI();
-  }, [url]);
+  const [{ isLoading, isError, data }, setUrl] = useGetData(initUrl);
 
   const renderCard = items =>
     items.map(({ id = '', name = '', air_date = '', episode = '' }) => (
@@ -66,20 +47,9 @@ function App() {
       </Card>
     ));
 
-  const handleInputChange = e => {
-    const { value } = e.target;
-    const isInvalid = /[^0-9]/.test(value);
-    const isInvalidRange = num =>
-      num.length > 0 && (Number(num) > 36 || Number(num) === 0);
-    if (isInvalid || isInvalidRange(value)) {
-      e.preventDefault();
-      return;
-    }
-    setText(value);
-  };
-
-  const handleOnClick = () => {
-    setUrl(`https://rickandmortyapi.com/api/episode/${text}`);
+  const handleOnSubmit = () => {
+    searchInput &&
+      setUrl(`https://rickandmortyapi.com/api/episode/${searchInput.value}`);
   };
 
   return (
@@ -89,14 +59,14 @@ function App() {
           <p>Rick And Morty</p>
         </header>
 
-        <SearchBar>
-          <InputComponent
-            type="text"
-            placeholder="type number ..."
-            value={text}
-            onChange={handleInputChange}
-          />
-          <SearchIcon onClick={handleOnClick}>🔍</SearchIcon>
+        <SearchBar
+          onSubmit={e => {
+            handleOnSubmit();
+            e.preventDefault();
+          }}
+        >
+          <InputComponent {...searchInput} />
+          <SearchIcon type="submit">🔍</SearchIcon>
         </SearchBar>
         <CardWrapper>
           {isLoading && (

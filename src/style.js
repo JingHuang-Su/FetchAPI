@@ -91,7 +91,7 @@ const AirReleased = styled.div`
   color: rgba(0, 0, 0, 0.85);
 `;
 
-const SearchBar = styled('div')`
+const SearchBar = styled('form')`
   margin: 0 auto;
   position: relative;
 `;
@@ -109,18 +109,17 @@ const InputComponent = styled.input`
     transition: 0.5s;
   }
 `;
-const SearchIcon = styled.span`
+const SearchIcon = styled.button`
+  background-color: transparent;
+  border: none;
+  outline: none;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
-  height: 16px;
-  width: 16px;
   font-size: 12px;
   position: absolute;
-  font-family: 'fontawesome';
   top: 50%;
-  right: 4px;
+  right: -10px;
   transform: translate(-50%, -50%);
-
   :active {
     transform: translate(-50%, -50%) scale(1.1);
     transition: transform 0.35s ease;
