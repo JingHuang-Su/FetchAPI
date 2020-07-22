@@ -11,7 +11,11 @@ export const useGetData = initUrl => {
       setIsError(false);
       setIsLoading(true);
       try {
-        const response = await window.fetch(url);
+        const response = await window.fetch(url, {
+          headers: { token: 'secretNumber' },
+        });
+        // const response = await window.fetch(url);
+
         const resData = await response.json();
 
         if (response.status >= 400) {

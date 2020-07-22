@@ -21,7 +21,7 @@ import useFormInput from './hooks/useFormInput';
 import './App.css';
 
 function App() {
-  const initUrl = 'https://rickandmortyapi.com/api/episode/';
+  const initUrl = 'https://dev.app/api/episode/';
 
   const searchInput = useFormInput({
     name: 'searchInput',
@@ -70,7 +70,7 @@ function App() {
         </SearchBar>
         <CardWrapper>
           {isLoading && (
-            <BasicCard>
+            <BasicCard data-testid="loading">
               <MyLoader />
             </BasicCard>
           )}
@@ -83,5 +83,7 @@ function App() {
     </Wrapper>
   );
 }
+
+BasicCard.displayName = 'BasicCard';
 
 export default App;
